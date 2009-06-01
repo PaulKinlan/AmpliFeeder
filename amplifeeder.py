@@ -26,6 +26,7 @@ import friendfeedproxy
 import simplejsondate
 import model
 import pinger
+import admin
 
 def smart_bool(s):
 	if s is True or s is False:
@@ -64,12 +65,13 @@ channelMap = {
 }
 
 serviceTypeMap = {
-	"Bookmark" : [],
-	"Video" : [],
-	"Image" : [],
-	"Post" : [],
-	"Note": []
+	"Bookmark" : ["digg", "delicious", "reddit", "stumbleupon", "mixx"],
+	"Video" : ["youtube", "vimeo"],
+	"Image" : ["flickr", "picasa"],
+	"Post" : ["upcoming", "tumblr", "microblog", "customatom", "customrss20", "googlereader"],
+	"Note": ["twitter", "facebook", "lastfm", "brighkite"]
 }
+
 	
 	
 def	LoadFriendFeedProfile(profile):
@@ -122,6 +124,13 @@ class FriendFeedConverter():
 			item.update(PublishDate = entry[u"published"])
 			item.update(PrettyDate = ":".join(timeago) + " ago")
 			item.update(Date = entry[u"published"])
+			
+			#If the link contains media embed that.
+			if u"media" in entry and len(entry[u"media"]) > 0:
+				logging.info(entry)
+				item.update(ItemContentPreview = entry[u"media"][0][u"thumbnails"][0][u"url"])
+			
+			
 			item.update(SourceLink = entry[u"link"])
 			item.update(SourceTypeName = channelMap[entry[u"service"][u"id"]])
 			item.update(SourceTitle = entry[u"service"][u"name"])
@@ -242,7 +251,7 @@ class UIService(webapp.RequestHandler):
 			# Don't allow anyone to call any un-meant method.
 			return
 		#Load this module so we can dyanmically load the class
-		m = __import__("frienddeck")
+		m = __import__("amplifeeder")
 		#Import the module and then call it.
 		m = getattr(m, method)()
 		# Pass in the request object
@@ -325,13 +334,16 @@ class GetItemsPackage():
 		elif input["ItemFilterType"] == "Search":
 			ff = friendfeedproxy.FriendFeed()
 			kwargs = {}
-			kwargs["from"] =settings.Username
+			kwargs["from"] = settings.Username
 			query = input["ItemFilterArgument"]
 
 			feed = ff.search(query, **kwargs )
 		elif input["ItemFilterType"] == "ItemType":
-			# "ItemFilterArgument":"Bookmark"
-			pass
+			argument = input["ItemFilterArgument"]
+			logging.info("Filtering on Type %s" % argument)
+						
+			ff = friendfeedproxy.FriendFeed()
+			feed = ff.fetch_user_services_feed(settings.Username,  serviceTypeMap[argument])
 		
 		json = converter.ConvertUserFeed(feed)
 		
@@ -408,7 +420,7 @@ class GetFeature():
 		request.response.out.write("{}")
 	
 def main():
-    application = webapp.WSGIApplication([(r'/', Index), (r'/default.aspx', Index), (r'/Settings', Settings), (r'/Init', Init) ,(r'/friendfeed/ping', pinger.Ping), (r'/AssetCombiner.ashx', AssetCombiner), (r'/UIService.asmx/(.+)', UIService), (r'/detail.aspx', Detail)], debug=False)
+    application = webapp.WSGIApplication([(r'/', Index), (r'/default.aspx', Index), (r'/Settings', admin.Settings), (r'/Init', Init) ,(r'/friendfeed/ping', pinger.Ping), (r'/AssetCombiner.ashx', AssetCombiner), (r'/UIService.asmx/(.+)', UIService), (r'/detail.aspx', Detail)], debug=False)
     wsgiref.handlers.CGIHandler().run(application);
 
 if __name__ == '__main__':

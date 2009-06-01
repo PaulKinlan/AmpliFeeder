@@ -144,7 +144,6 @@ class FriendFeed(object):
         The query syntax is the same syntax as
         http://friendfeed.com/advancedsearch
         """
-        logging.info(q)
         kwargs["q"] = q
         return self._fetch_feed("/api/feed/search", **kwargs)
 

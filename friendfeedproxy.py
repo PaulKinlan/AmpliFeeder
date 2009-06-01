@@ -80,3 +80,13 @@ class FriendFeed(object):
         http://friendfeed.com/advancedsearch
         """
         return self.service.search(q, **kwargs)
+    @selfmemoize("friendfeed.fetch_user_services_feed:%s-%s", time = timeout)
+    def fetch_user_services_feed(self, user, services, **kwargs):
+        """Returns the entries shared from selected services for the user with the given nickname.
+
+        Authentication is required if the user's feed is not public.
+        """
+        logging.info("Services %s" % services)
+        kwargs["from"] = user
+        kwargs["service"] = ",".join(services)
+        return self.service.search("", **kwargs)
