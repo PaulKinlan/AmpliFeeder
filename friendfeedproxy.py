@@ -4,6 +4,7 @@ import logging
 from utils import selfmemoize
 
 timeout = 600
+itemcount = 16
 
 class FriendFeed(object):
     def __init__(self, auth_nickname=None, auth_key=None):
@@ -27,24 +28,38 @@ class FriendFeed(object):
         """
         return self.service._fetch_feed("/api/feed/public", **kwargs)
 
-    #@selfmemoize("friendfeed.fetch_user_feed:%s", time = timeout)
-    def fetch_user_feed(self, nickname, **kwargs):
+    @selfmemoize("friendfeed.fetch_user_feed:%s,%d", time = timeout)
+    def fetch_user_feed(self, nickname, page, **kwargs):
         """Returns the entries shared by the user with the given nickname.
 
         Authentication is required if the user's feed is not public.
         """
+        page = page - 1
+        if page == 0:
+            start = 0
+        else:
+            start = page * 16
+        kwargs["start"] = start
+        kwargs["num"] = 16
+		
         return self.service._fetch_feed(
             "/api/feed/user/" + urllib.quote_plus(nickname), **kwargs)
 
-    @selfmemoize("friendfeed.fetch_user_service_feed:%s,%s", time = timeout)
-    def fetch_user_service_feed(self, nickname, service, **kwargs):
+    @selfmemoize("friendfeed.fetch_user_service_feed:%s,%s,%d", time = timeout)
+    def fetch_user_service_feed(self, nickname, service, page, **kwargs):
         """Returns the entries shared by the user with the given nickname.
 
         Authentication is required if the user's feed is not public.
         """
 		
         kwargs["service"] = service
-		
+        page = page - 1
+        if page == 0:
+            start = 0
+        else:
+            start = page * 16
+        kwargs["start"] = start
+        kwargs["num"] = 16
         return self.service._fetch_feed(
             "/api/feed/user/" + urllib.quote_plus(nickname), **kwargs)
 	
@@ -68,8 +83,8 @@ class FriendFeed(object):
         return self.service._fetch_feed(
             "/api/feed/entry", **kwargs)
     
-    @selfmemoize("friendfeed.search:%s", time = timeout)
-    def search(self, q, **kwargs):
+    @selfmemoize("friendfeed.search:%s,%d", time = timeout)
+    def search(self, q, page, **kwargs):
         """Searches over entries in FriendFeed.
 
         If the request is authenticated, the default scope is over all of the
@@ -79,14 +94,28 @@ class FriendFeed(object):
         The query syntax is the same syntax as
         http://friendfeed.com/advancedsearch
         """
+        page = page - 1
+        if page == 0:
+            start = 0
+        else:
+            start = page * 16
+        kwargs["start"] = start
+        kwargs["num"] = 16
         return self.service.search(q, **kwargs)
+    
     @selfmemoize("friendfeed.fetch_user_services_feed:%s-%s", time = timeout)
-    def fetch_user_services_feed(self, user, services, **kwargs):
+    def fetch_user_services_feed(self, user, services, page, **kwargs):
         """Returns the entries shared from selected services for the user with the given nickname.
 
         Authentication is required if the user's feed is not public.
         """
-        logging.info("Services %s" % services)
+        page = page - 1
+        if page == 0:
+            start = 0
+        else:
+            start = page * 16
         kwargs["from"] = user
         kwargs["service"] = ",".join(services)
+        kwargs["start"] = start
+        kwargs["num"] = 16
         return self.service.search("", **kwargs)

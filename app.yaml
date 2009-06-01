@@ -20,7 +20,7 @@ handlers:
   static_dir: Assets/img/icons/24
 - url: /Assets/img
   static_dir: Assets/img
-- url: /Settings
+- url: /admin/*
   script: admin.py
   login: admin
 - url: .*

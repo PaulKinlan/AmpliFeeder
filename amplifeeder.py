@@ -28,6 +28,26 @@ import model
 import pinger
 import admin
 
+def prettydate(timestamp):
+	ageresult = datetime.datetime.today() - timestamp
+	
+	if ageresult.days < 1:
+		hours = ageresult.seconds / 3600
+		if hours == 0:
+			return "not long "
+		elif hours == 1:
+			return str(hours) + " hour "
+		else:
+			return str(hours) + " hours "
+	else:
+		days = str(ageresult.days)
+		if days == "1":
+			return days + " day "
+		else:
+			return days + " days "
+	
+	return 
+
 def smart_bool(s):
 	if s is True or s is False:
 		return s
@@ -72,24 +92,6 @@ serviceTypeMap = {
 	"Note": ["twitter", "facebook", "lastfm", "brighkite"]
 }
 
-	
-	
-def	LoadFriendFeedProfile(profile):
-	'Loads the Users Friendfeed profile into the app engine'
-	ff = friendfeedproxy.FriendFeed()
-	profile = ff.fetch_user_profile('kinlan')
-		
-	for service in profile["services"]:
-		logging.info(service)
-		if u"profileUrl" in service:
-			channel = model.Channel(key_name = service[u"id"])
-			channel.ChannelType = service[u"name"]
-			channel.FeedUri = service[u"profileUrl"]
-			channel.Name = service[u"name"]
-			channel.Title = service[u"name"]
-			channel.IsEnabled = True
-			channel.put()
-
 class FriendFeedConverter():
 	def ConvertChannels(self, profile):	
 		channels = []
@@ -118,18 +120,20 @@ class FriendFeedConverter():
 		for entry in profile[u"entries"]:
 			item = {}
 						
-			timeago = str(datetime.datetime.now() - entry[u"published"]).split(':')[:2]
+			timeago = prettydate(entry[u"published"])
 			
 			item.update(Title = entry[u"title"])
 			item.update(PublishDate = entry[u"published"])
-			item.update(PrettyDate = ":".join(timeago) + " ago")
+			item.update(PrettyDate = timeago + " ago")
 			item.update(Date = entry[u"published"])
+			item.update(Description = entry[u"title"])
+			
 			
 			#If the link contains media embed that.
 			if u"media" in entry and len(entry[u"media"]) > 0:
 				logging.info(entry)
-				item.update(ItemContentPreview = entry[u"media"][0][u"thumbnails"][0][u"url"])
-			
+				if u"thumbnails" in entry[u"media"][0] and entry[u"media"][0][u"thumbnails"] != "None":
+					item.update(ItemContentPreview = entry[u"media"][0][u"thumbnails"][0][u"url"])
 			
 			item.update(SourceLink = entry[u"link"])
 			item.update(SourceTypeName = channelMap[entry[u"service"][u"id"]])
@@ -165,17 +169,23 @@ class FriendFeedConverter():
 		for entry in entry[u"entries"]:
 			item = {}
 						
-			timeago = str(datetime.datetime.now() - entry[u"published"]).split(':')[:2]
+			timeago = prettydate(entry[u"published"])
 			
 			item.update(Title = entry[u"title"])
 			item.update(PublishDate = entry[u"published"])
-			item.update(PrettyDate = ":".join(timeago) + " ago")
+			item.update(PrettyDate = timeago + " ago")
 			item.update(Date = entry[u"published"])
 			item.update(SourceLink = entry[u"link"])
 			item.update(SourceTypeName = channelMap[entry[u"service"][u"id"]])
 			item.update(SourceTitle = entry[u"service"][u"name"])
 			item.update(Description = "")
 			item.update(Id = entry[u"id"])
+			#If the link contains media embed that.
+			if u"media" in entry and len(entry[u"media"]) > 0:
+				logging.info(entry)
+				item.update(ItemContent = entry[u"media"][0][u"thumbnails"][0][u"url"])
+				#Work out a decent way to get the data inline.
+				item.update(Data = "<img src=\"%s\" />" %entry[u"media"][0][u"content"][0][u"url"])
 			
 			item.update(CommentCount = len(entry[u"comments"]))
 			
@@ -214,7 +224,6 @@ class Index(webapp.RequestHandler):
 		if s.Configured == True:			
 			output = RenderThemeTemplate("Default.tmpl", { "startup": "var ThemeName = '%s'" % s.Theme })
 		else:
-			LoadFriendFeedProfile(s.Username)
 			s.Configured = True
 			s.put()
 		
@@ -288,17 +297,17 @@ class GetInitItemsPackage():
 		#{"PageSize":"16", "PageNumber":"1", "ItemFilterType":"None", "ItemFilterArgument":"None"}
 				
 		json = {}
-				
+		pageNumber = int(input["PageNumber"])
 		# Might want to cache this
 		if input["ItemFilterType"] == u"None":
 			# Front page
 			ff = friendfeedproxy.FriendFeed()
-			feed = ff.fetch_user_feed(settings.Username)#, page = input["PageNumber"])
+			feed = ff.fetch_user_feed(settings.Username, pageNumber)
 			json = converter.ConvertUserFeed(feed)
 		
 		feedItems = []
 		item = None
-		pageCount = 0
+		pageCount = 100
 		channel = None
 		comments = None
 				
@@ -307,6 +316,7 @@ class GetInitItemsPackage():
 		json.update(Item = item)
 		json.update(PageCount = pageCount)
 		json.update(Channel = channel)
+		
 		#json.update(Comments = comments)
 		json.update(Settings = settings.to_dict())
 		
@@ -324,26 +334,27 @@ class GetItemsPackage():
 				
 		feed = {}
 		
+		pageNumber = int(input["PageNumber"])
+		
 		if input["ItemFilterType"] is None or  input["ItemFilterType"] == "None" :
 			ff = friendfeedproxy.FriendFeed()
-			feed = ff.fetch_user_feed(settings.Username, service = input["ItemFilterArgument"])
+			feed = ff.fetch_user_feed(settings.Username, pageNumber, service = input["ItemFilterArgument"])
 		elif input["ItemFilterType"] == "Source":
-			logging.info("Filtering on Source %s" % input["ItemFilterArgument"])
 			ff = friendfeedproxy.FriendFeed()
-			feed = ff.fetch_user_service_feed(settings.Username, input["ItemFilterArgument"])
+			feed = ff.fetch_user_service_feed(settings.Username, input["ItemFilterArgument"], pageNumber)
 		elif input["ItemFilterType"] == "Search":
 			ff = friendfeedproxy.FriendFeed()
 			kwargs = {}
 			kwargs["from"] = settings.Username
 			query = input["ItemFilterArgument"]
 
-			feed = ff.search(query, **kwargs )
+			feed = ff.search(query, pageNumber,  **kwargs )
 		elif input["ItemFilterType"] == "ItemType":
 			argument = input["ItemFilterArgument"]
 			logging.info("Filtering on Type %s" % argument)
 						
 			ff = friendfeedproxy.FriendFeed()
-			feed = ff.fetch_user_services_feed(settings.Username,  serviceTypeMap[argument])
+			feed = ff.fetch_user_services_feed(settings.Username, serviceTypeMap[argument], pageNumber)
 		
 		json = converter.ConvertUserFeed(feed)
 		
@@ -397,8 +408,7 @@ class GetDetailItem():
 		ff = friendfeedproxy.FriendFeed()
 		entry = ff.fetch_entry(input[u"itemID"])		
 		detail = converter.ConvertEntry(entry)
-		logging.info(detail["Item"]["SourceTypeName"])
-		feed = ff.fetch_user_feed(settings.Username, service = detail["Item"]["SourceTypeName"].lower())
+		feed = ff.fetch_user_feed(settings.Username, 1 , service = detail["Item"]["SourceTypeName"].lower())
 		json = converter.ConvertUserFeed(feed)
 		
 		detail.update(Settings = settings.to_dict())
@@ -406,8 +416,6 @@ class GetDetailItem():
 
 		d = { }
 		d.update(d = detail)
-		
-		
 		
 		request.response.out.write(simplejsondate.dumps(d))
 		
@@ -420,7 +428,7 @@ class GetFeature():
 		request.response.out.write("{}")
 	
 def main():
-    application = webapp.WSGIApplication([(r'/', Index), (r'/default.aspx', Index), (r'/Settings', admin.Settings), (r'/Init', Init) ,(r'/friendfeed/ping', pinger.Ping), (r'/AssetCombiner.ashx', AssetCombiner), (r'/UIService.asmx/(.+)', UIService), (r'/detail.aspx', Detail)], debug=False)
+    application = webapp.WSGIApplication([(r'/', Index), (r'/default.aspx', Index), (r'/admin/Settings', admin.Settings),(r'/Init', Init) ,(r'/friendfeed/ping', pinger.Ping), (r'/AssetCombiner.ashx', AssetCombiner), (r'/UIService.asmx/(.+)', UIService), (r'/detail.aspx', Detail)], debug=False)
     wsgiref.handlers.CGIHandler().run(application);
 
 if __name__ == '__main__':

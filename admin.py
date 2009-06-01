@@ -9,6 +9,7 @@ import friendfeedproxy
 
 import simplejsondate
 import model
+import logging
 import pinger
 
 class SettingsForm(djangoforms.ModelForm):
