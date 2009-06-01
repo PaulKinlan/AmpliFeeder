@@ -1,0 +1,167 @@
+﻿body {
+padding:0px;
+margin:0px;
+background:url("bg2.jpg");
+text-align:center;
+font: 0.75em Arial, 'Lucida Grande',sans-serif;
+}
+
+#container
+{
+width:100%;
+background:url("bg.jpg");
+margin-left:auto;
+margin-right:auto;
+background-repeat: no-repeat;   background-attachment:fixed;   background-position: top center; 
+padding-top:100px;
+
+}
+
+#content
+{
+text-align:left;
+width:735px;
+background-color:#fff;
+margin-left:auto;
+margin-right:auto;
+padding:15px;
+}
+
+#left
+{
+width:475px;
+float:left;
+margin-right:25px;
+}
+
+#right
+{
+width:230px;
+float:left;
+color: #808080;
+}
+
+#right a
+{
+color:#0084b4;
+}
+
+#bannerholder
+{
+width:475px;
+height:144px;
+background:url("banner.jpg");
+}
+
+#footer
+{
+background:url("bg3.jpg");
+width:726px;
+margin-left:auto;
+margin-right:auto;
+padding:20px;
+margin-bottom:150px;
+}
+
+h3
+{
+font-size:18px;
+}
+
+#title
+{
+color:#FFFCD7;
+font-size:36px;
+padding-left:70px;
+padding-top:30px;
+font-family: Georgia, serif;
+font-style: italic;
+font-weight: normal;
+letter-spacing: normal;
+font-weight:700;
+}
+
+#title a
+{
+color:#FFFCD7;
+text-decoration:none;
+}
+
+#tagline
+{
+color:#FFFCD7;
+font-size:18px;
+padding-left:70px;
+font-family: Georgia, serif;
+font-style: italic;
+font-weight: normal;
+letter-spacing: normal;
+padding-top:10px;
+}
+
+#items
+{
+margin-top:15px;
+}
+
+.item
+{
+width:475px;
+PADDING-RIGHT: 0px;	
+PADDING-LEFT: 0px;	
+PADDING-BOTTOM: 0.6em;	
+LINE-HEIGHT: 1.1em;	
+PADDING-TOP: 0.7em;	
+BORDER-BOTTOM: #d2dada 1px dashed;	
+POSITION: relative;
+color: #808080;
+font-size:1.2em;
+overflow:hidden;
+}
+
+.itemfooter
+{
+DISPLAY: block;	
+FONT-SIZE: 0.8em;	
+MARGIN: 3px 0px 0px;	
+COLOR: #999;	
+FONT-STYLE: italic;	
+FONT-FAMILY: georgia;
+}
+
+.item a
+{
+color:#0084b4;
+text-decoration:none;
+}
+
+.item a:hover
+{
+text-decoration:underline;
+}
+
+
+
+.btn
+{
+	BORDER-RIGHT: black 1px solid;	
+	PADDING-RIGHT: .5em;	
+	BORDER-TOP: black 1px solid;	
+	PADDING-LEFT: .5em;	
+	FONT-WEIGHT: bold;	
+	FONT-SIZE: 11pt;	
+	PADDING-BOTTOM: 0.1em;	
+	BORDER-LEFT: black 1px solid;	
+	COLOR: white;	
+	PADDING-TOP: 0.1em;	
+	BORDER-BOTTOM: black 1px solid;	
+	BACKGROUND-COLOR: #417596;
+	margin-left:10px;
+}
+
+#alertbox
+{
+BACKGROUND-COLOR: #417596;
+COLOR: white;
+padding:15px;
+}

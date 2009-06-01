@@ -1,0 +1,27 @@
+application: thecommentthing
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /Assets/css
+  static_dir: Assets/css
+- url: /Themes
+  static_dir: Themes
+- url: /Assests/Js
+  static_dir: Assests/Js
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+- url: /robots.txt
+  static_files: robots.txt
+  upload: robots.txt
+- url: /Assets/img/icons/24
+  static_dir: Assets/img/icons/24
+- url: /Assets/img
+  static_dir: Assets/img
+- url: /Settings
+  script: admin.py
+  login: admin
+- url: .*
+  script: amplifeeder.py

@@ -1,0 +1,4 @@
+cron:
+#- description: AmpliPinger
+#  url: /friendfeed/ping
+#  schedule: every 2 minutes

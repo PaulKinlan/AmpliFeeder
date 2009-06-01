@@ -1,0 +1,253 @@
+﻿<div id="TemplateSettings">
+     <div id="PageSize">20</div>
+   </div>
+   
+   
+   
+    <div id="MasterTemplate" >
+    
+   
+
+    <div id="container">
+        <div id="content">
+            <div id="left">
+                <div id="bannerholder">
+                    <div id="title">
+                        Title</div>
+                    <div id="tagline">
+                        tagline</div>
+                </div>
+                <div id="items">
+                   
+                    
+                    
+                    <div id="alertbox" >hello</div>                      
+                       
+          <div id="TemplateItemsHolder" />
+              
+                        <div id="pager" />
+                    
+                    
+                </div>
+            </div>
+            <div id="right">
+                <h3>
+                    About Me</h3>
+                <div id="about">
+                </div>
+                <h3>
+                    Channels</h3>
+                <div id="channels">
+                </div>
+                <h3>
+                Pages</h3>
+                <div id="pages">
+                </div>
+                <h3>
+                    Tags</h3>
+                <div id="TagList">
+                </div>
+                <h3>
+                    Search</h3>
+                <div id="Search">
+                </div>
+                <h3>Subscribe</h3>
+                <a href="Feed.aspx">Click here to subscribe via RSS</a>
+            </div>
+            <div style="float:none;clear:both;" ></div>
+        </div>
+        <div style="float: none; clear: both;" />
+        <div id="footer">
+            This site is powered by <a href="http://www.amplifeeder.com">AmpliFeeder</a>, an open source lifestream platform by <a href="http://www.j-dee.com">Jon Paul Davies</a>.
+            AmpliFeeder is available under the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">GNU Affero General Public License</a> (or AGPL for short),a version of the <a href="http://www.gnu.org/licenses/gpl.html">GNU GPL</a> designed specifically for web applications.
+
+            All trademarks, slogans, text or logo represented, used or infered to on this site are the property of their respective owners.
+        </div>
+    </div>
+
+   
+    </div>  
+    
+<div id="ItemTemplates">
+
+
+
+
+    <div class="ItemTemplate Microblog" >
+        <div class="item">
+            <div class="itembody">
+                ${Title}
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from ${SourceTitle}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ItemTemplate Twitter Brightkite" >
+        <div class="item">
+            <div class="itembody">
+                ${Title}
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ItemTemplate Flickr Picasa" >
+        <div class="item">
+            <div class="itembody">
+                Posted an image called <a href="#" onclick="window.open('${SourceLink}');">'${Title}'</a> to my ${SourceTitle} account
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="ItemTemplate Digg" >
+        <div class="item">
+            <div class="itembody">
+                Dugg an article called <a href="#" onclick="window.open('${SourceLink}');">'${Title}'</a>
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="ItemTemplate YouTube" >
+        <div class="item">
+            <div class="itembody">
+                Video on ${SourceTitle} called '${Title}'. Go and check it out <a href="#" onclick="window.open('${SourceLink}');">here</a>
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ItemTemplate Vimeo" >
+        <div class="item">
+            <div class="itembody">
+                Check out this video on ${SourceTitle} called '<a href="#" onclick="window.open('${SourceLink}');">${Title}</a>'.
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="ItemTemplate Delicious Reddit Mixx" >
+        <div class="item">
+            <div class="itembody">
+                Bookmarked '<a href="#" onclick="window.open('${SourceLink}');">${Title}</a>' on ${SourceTitle} for later review.
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ItemTemplate CustomRSS20 CustomAtom GoogleReader" >
+        <div class="item">
+            <div class="itembody">
+                Found '<a href="#" onclick="window.open('${SourceLink}');">${Title}</a>' on ${SourceTitle} to be of interest.
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="ItemTemplate Stumbleupon" >
+        <div class="item">
+            <div class="itembody">
+                Stumbled upon '<a href="#" onclick="window.open('${SourceLink}');">${Title}</a>' 
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="ItemTemplate Upcoming" >
+        <div class="item">
+            <div class="itembody">
+                Thinking of attending '<a href="#" onclick="window.open('${SourceLink}');">${Title}</a>'
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="ItemTemplate Tumblr" >
+        <div class="item">
+            <div class="itembody">
+                posted '<a href="#" onclick="window.open('${SourceLink}');">${Title}</a>' to my Tumblr site.
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ItemTemplate Facebook" >
+        <div class="item">
+            <div class="itembody">
+                Changed my Facbook status to '${Title}'
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ItemTemplate LastFM" >
+        <div class="item">
+            <div class="itembody">
+                Listened to ${Description} by ${Title}
+            </div>
+            <div class="itemfooter">
+                ${PublishDate} from <a href="#" onclick="window.open('${SourceLink}');">${SourceTitle}</a>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+    
+    <div id="ChannelTemplate">
+  <div class="channel" id="${Id}">
+    <img width="18px" height="18px" class="channelbutton" id="${Id}" alt="all ${Title} posts" src="Assets/img/icons/24/${SourceTypeName}.png" /> ${Title}
+    <br style="clear:both;float:none;" />
+  </div>
+  </div>
+  
+      <div id="ItemTypeTemplate">
+  <div class="channel" id="${Id}">
+    <img width="18px" height="18px" class="channelbutton" id="${Id}" alt="all ${Title} posts" src="Assets/img/icons/24/${SourceTypeName}.png" /> ${Title}
+    <br style="clear:both;float:none;" />
+  </div>
+  </div>

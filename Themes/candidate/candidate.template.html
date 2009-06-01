@@ -1,0 +1,265 @@
+﻿ <div id="TemplateSettings">
+     <div id="PageSize">12</div>
+   </div>
+      <div id="MasterTemplate" >
+         
+          
+          
+    <div id="container">
+        <div id="headercontainer">
+            <div id="header">
+                <div id="logo">
+                    <h1 id="title">
+                        Title</h1>
+                      
+                    <h2 id="tagline">
+                        tagline</h2>
+                </div>
+                <!--end logo -->
+            </div>
+            <!--end header -->
+        </div>
+        <!--end headercontainer -->
+        
+        <div id="controlcontainer">
+           
+        <div id="controls">
+
+                <span id="alertbox" >hello</span>
+
+        <span id="rss">
+
+        <img style="border:0px" usemap="#imgmap" src="Themes/candidate/rss.jpg" />
+        </span>
+            <div style="clear:both;float:none;" />
+        </div>
+        </div>
+        
+        <div id="contentcontainer">
+        
+        <div id="content">
+        <div id="contentleft" class="rowlabel">
+        Messages
+        </div>
+            <div id="contentright" class="rowdata">
+
+                <div id="TemplateItemsHolder" />
+
+            </div>
+            </div>
+          
+            <!-- end contentright --><div style="clear:both;float:none;" />
+        </div>
+        <!--end contentcontainer -->
+        <div id="pagercontainer">
+        <div id="pagerholder">
+            
+        <div id="pager"></div>
+            <div style="clear:both;float:none;" /><!--end pager -->
+        </div><!--end pagercontainer -->
+        </div>
+        <!--end pagercontainer -->
+        <div id="channelscontainer">
+        <div id="channelsbox">
+            <div id="channelsleft" class="rowlabel">
+                Channels
+            </div>
+            <!--end channelleft -->
+            <div id="channelsright" class="rowdata">
+                <div id="channels" ></div>
+            </div>
+            <!--end channelsright --><div style="clear:both;float:none;" />
+        </div>
+        </div>
+        <!--end channelcontainer -->
+        
+        
+        
+        <div id="tagscontainer">
+        <div id="tags">
+            <div id="tagsleft" class="rowlabel">
+                Tags
+            </div>
+            <!--end tagsleft -->
+            <div id="tagsright" class="rowdata">
+                <div id="TagList" />
+            </div>
+            <!--end tagsright --><div style="clear:both;float:none;" />
+        </div>
+        </div>
+        <!--end tagscontainer -->
+
+
+        <div id="footercontainer">
+        <div id="footer">
+        <div id="footerleft" class="rowlabel">
+        footer
+        </div>
+        <div id="footerright" class="rowdata">
+            This site is powered by <a href="http://www.amplifeeder.com">AmpliFeeder</a>, an open source lifestream platform by <a href="http://www.j-dee.com">Jon Paul Davies</a>.
+            AmpliFeeder is available under the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">GNU Affero General Public License</a> (or AGPL for short),a version of the <a href="http://www.gnu.org/licenses/gpl.html">GNU GPL</a> designed specifically for web applications.
+            
+            All trademarks, slogans, text or logo represented, used or infered to on this site are the property of their respective owners.
+
+
+            Some of the icons used on this site were created by the super groovy people over at <a href="http://famfamfam.com/">famfamfam.com</a>
+        </div><div style="clear:both;float:none;" />
+        </div>
+        </div>
+        <map name="imgmap">
+            <area shape="poly" coords="0,0,120,0,120,14,0,14" href="http://www.amplifeeder.com" alt="amplifeeder">
+            <area shape="poly" coords="130,0,157,0,157,14,130,14" href="Feed.aspx" alt="Subscribe via RSS">   
+        </map>
+    </div>
+    <!--end container -->
+
+          <!-- minus 133388 -->
+          <script type="text/javascript">
+              function MasterPageRendered()
+              {
+              $(".tag:even").css("color","#ccc");
+              $(".channel:even").css("color","#ccc");
+              var lastcolor;
+              $("#contentright .post").each(function(i){ ModifyBackground(this,this.id,i); });
+
+              if($("#alertbox:visible").length>0)
+              {
+              $("#alertbox").fadeIn(20).fadeOut(40).fadeIn(60).fadeOut(80).fadeIn(100).fadeIn(20).fadeOut(40).fadeIn(60).fadeOut(80).fadeIn(100);
+              }
+
+              $("#contentright").mouseover(function() { document.body.style.cursor = "pointer"; }).mouseout(function() { document.body.style.cursor = "auto"; });
+              }
+
+              function ModifyBackground(post,origBG,i)
+              {
+
+              var newBG = adjust_brightness(origBG,-((i-1)*5));
+              $(post).css("background-color",newBG);
+
+              }
+
+              function adjust_brightness(hex, brightness)
+              {
+              var str = hex.replace(/#/g, "");
+              var rDec = parseInt(str.substr(0,2),16);
+              var gDec = parseInt(str.substr(2,2),16);
+              var bDec = parseInt(str.substr(4,2),16);
+
+              rDec = Math.round(rDec * (1 + (brightness)/100));
+              gDec = Math.round(gDec * (1 + (brightness)/100));
+              bDec = Math.round(bDec * (1 + (brightness)/100));
+
+              var r = rDec.toString(16);
+              var g = gDec.toString(16);
+              var b = bDec.toString(16);
+
+              if(r.length>2)
+              {
+              r="FF";
+              }
+
+              if(g.length>2)
+              {
+              g="FF";
+              }
+
+              if(b.length>2)
+              {
+              b="FF";
+              }
+
+              if(r.length==1)
+              {
+              r="00";
+              }
+
+              if(g.length==1)
+              {
+              g="00";
+              }
+
+              if(b.length==1)
+              {
+              b="00";
+              }
+
+              var answer = "#" + r + g + b;
+              return answer;
+              }
+          </script>
+                </div>
+                
+<div id="ItemTemplates">
+
+    <div class="ItemTemplate Twitter Facebook Brightkite" >
+        <div class="post" id="#43a2c1" onclick="top.location='${SourceLink}';">
+            <img src="Themes/candidate/comment.gif" /> ${SourceTitle} Status:<br/>${Title}
+            <div class="postfooter">
+                ${PrettyDate}
+            </div>
+            <!-- end postfooter -->
+        </div>
+    </div>
+
+    <div class="ItemTemplate GoogleReader Tumblr CustomRSS20 CustomAtom" >
+        <div class="post" id="#a2c143" onclick="top.location='${SourceLink}';">
+            <img src="Themes/candidate/icon_world.gif" /> ${SourceTitle} Post:<br/>${Title}
+            <div class="postfooter">
+                ${PrettyDate}
+            </div>
+            <!-- end postfooter -->
+        </div>
+    </div>
+	
+	    <div class="ItemTemplate Micro" >
+        <div class="post" id="#a2c143">
+            <img src="Themes/candidate/icon_world.gif" /> ${SourceTitle} Post:<br/>${Title}
+            <div class="postfooter">
+                ${PrettyDate}
+            </div>
+            <!-- end postfooter -->
+        </div>
+    </div>
+
+    <div class="ItemTemplate Mixx Reddit Stumbleupon Delicious Digg Upcoming LastFM Blog" >
+        <div class="post" id="#c143a2" onclick="top.location='${SourceLink}';">
+            <img src="Themes/candidate/icon_attachment.gif" /> ${SourceTitle} Bookmark:<br/>${Title}
+            <div class="postfooter">
+                ${PrettyDate}
+            </div>
+            <!-- end postfooter -->
+        </div>
+    </div>
+
+    <div class="ItemTemplate Flickr Picasa" >
+        <div class="post" id="#ff6565" onclick="top.location='${SourceLink}';">
+            <img src="Themes/candidate/image.gif" /> ${SourceTitle} Image:<br/>${Title}
+            <div class="postfooter">
+                ${PrettyDate}
+            </div>
+            <!-- end postfooter -->
+        </div>
+    </div>
+
+    <div class="ItemTemplate Vimeo YouTube" >
+        <div class="post" id="#bbbbbb" onclick="top.location='${SourceLink}';">
+            <img src="Themes/candidate/interface_installer.gif" /> ${SourceTitle} Video:<br/>${Title}
+            <div class="postfooter">
+                ${PrettyDate}
+            </div>
+            <!-- end postfooter -->
+        </div>
+    </div>
+    
+    
+</div>
+<div id="ChannelTemplate">
+    <div class="channel" id="${Id}">
+        ${Title}&nbsp;
+    </div>
+</div>
+<div id="ItemTypeTemplate">
+    <div class="channel" id="${Id}">
+        ${Title}&nbsp;
+    </div>
+</div>
