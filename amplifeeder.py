@@ -71,7 +71,7 @@ channelMap = {
 	"facebook" : "Facebook",
 	"flickr" : "Flickr",
 	"googlereader": "GoogleReader",
-	"internal" : "Internal",
+	"internal" : "CustomRSS20",
 	"linkedin" : "LinkedIn",
 	"reddit" : "Reddit",
 	"twitter": "Twitter",
@@ -106,7 +106,10 @@ class FriendFeedConverter():
 				channel.update(Title = service[u"name"])
 				channel.update(IsEnabled = True)
 				channel.update(Id = service[u"id"])
-				channel.update(SourceTypeName = channelMap[service[u"id"]])
+				if service[u"id"] in channelMap:
+					channel.update(SourceTypeName = channelMap[service[u"id"]])
+				else:
+					channel.update(SourceTypeName = channelMap["none"])
 				channels.append(channel)
 		
 		return channels
@@ -132,11 +135,15 @@ class FriendFeedConverter():
 			#If the link contains media embed that.
 			if u"media" in entry and len(entry[u"media"]) > 0:
 				logging.info(entry)
-				if u"thumbnails" in entry[u"media"][0] and entry[u"media"][0][u"thumbnails"] != "None":
+				if u"thumbnails" in entry[u"media"][0] and entry[u"media"][0][u"thumbnails"] != None:
 					item.update(ItemContentPreview = entry[u"media"][0][u"thumbnails"][0][u"url"])
 			
 			item.update(SourceLink = entry[u"link"])
-			item.update(SourceTypeName = channelMap[entry[u"service"][u"id"]])
+			if entry[u"service"][u"id"] in channelMap:
+				item.update(SourceTypeName = channelMap[entry[u"service"][u"id"]])
+			else:
+				item.update(SourceTypeName = channelMap["none"])
+
 			item.update(SourceTitle = entry[u"service"][u"name"])
 			item.update(Id = entry[u"id"])
 			
@@ -176,7 +183,12 @@ class FriendFeedConverter():
 			item.update(PrettyDate = timeago + " ago")
 			item.update(Date = entry[u"published"])
 			item.update(SourceLink = entry[u"link"])
-			item.update(SourceTypeName = channelMap[entry[u"service"][u"id"]])
+			
+			if entry[u"service"][u"id"] in channelMap:
+				item.update(SourceTypeName = channelMap[entry[u"service"][u"id"]])
+			else:
+				item.update(SourceTypeName = channelMap["none"])
+				
 			item.update(SourceTitle = entry[u"service"][u"name"])
 			item.update(Description = "")
 			item.update(Id = entry[u"id"])
@@ -206,6 +218,7 @@ class FriendFeedConverter():
 		d.update(Comments = comments)
 		
 		return d
+
 		
 class Init(webapp.RequestHandler):
 	def get(self):
@@ -221,11 +234,11 @@ class Index(webapp.RequestHandler):
 			s = model.Settings.CreateDefault()
 			
 		output = ""
-		if s.Configured == True:			
-			output = RenderThemeTemplate("Default.tmpl", { "startup": "var ThemeName = '%s'" % s.Theme })
-		else:
+		if s.Configured == False:			
 			s.Configured = True
 			s.put()
+			
+		output = RenderThemeTemplate("Default.tmpl", { "startup": "var ThemeName = '%s'" % s.Theme })
 		
 		
 		# First load will create load the user info in to the db.				
